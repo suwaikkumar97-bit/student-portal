@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>🎓 Student Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Login Card */
+        .login-card, .dashboard-card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo i {
+            font-size: 60px;
+            color: #667eea;
+        }
+
+        .logo h2 {
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        button:hover {
+            transform: scale(0.98);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px;
+            border-radius: 50px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Cards */
+        .panel {
+            display: none;
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            animation: fadeIn 0.3s;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .student-card {
+            background: linear-gradient(135deg, #f8f9fa, #fff);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .student-card h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .student-card p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 8px;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-warning {
+            background: #feebc8;
+            color: #7b341e;
+        }
+
+        .badge-danger {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .message-box {
+            background: #e8f0fe;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            z-index: 1000;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        .logout-btn {
+            background: #f56565;
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h3 {
+            color: white;
+        }
+
+        .header i {
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .login-card, .dashboard-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>Student Portal</h2>
+                <p style="color: #666; margin-top: 5px;">Login to access your dashboard</p>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username / Roll No</label>
+                <input type="text" id="loginUsername" placeholder="Enter username or roll number">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password">
+            </div>
+            <button class="btn-primary" id="loginBtn">🔐 Login</button>
+            <button class="btn-outline" id="adminLoginBtn" style="margin-top: 10px;">👨‍💼 Admin Login</button>
+        </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div id="studentDashboard" style="display: none;">
+        <div class="header">
+            <h3><i class="fas fa-user-graduate"></i> <span id="studentName"></span></h3>
+            <i class="fas fa-sign-out-alt" onclick="logout()"></i>
+        </div>
+        
+        <div class="dashboard-card" id="studentInfo"></div>
+        
+        <div class="tabs" id="studentTabs">
+            <button class="tab active" data-tab="progress">📊 प्रगति</button>
+            <button class="tab" data-tab="attendance">📝 अटेंडेंस</button>
+            <button class="tab" data-tab="fees">💰 फीस</button>
+        </div>
+        
+        <div class="panel active" id="progressPanel"></div>
+        <div class="panel" id="attendancePanel"></div>
+        <div class="panel" id="feesPanel"></div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" style="display: none;">
+        <div class="header">
+            <h3><i class="fas fa-chalkboard-user"></i> Admin Panel</h3>
+            <i class="fas fa-sign-out-alt" onclick="logout()"></i>
+        </div>
+        
+        <div class="tabs" id="adminTabs">
+            <button class="tab active" data-tab="students">📋 छात्र सूची</button>
+            <button class="tab" data-tab="add">➕ नया छात्र</button>
+            <button class="tab" data-tab="attendance">📝 अटेंडेंस</button>
+            <button class="tab" data-tab="fees">💰 फीस प्रबंधन</button>
+            <button class="tab" data-tab="messages">📨 मैसेज</button>
+        </div>
+        
+        <div class="panel active" id="adminStudentsPanel"></div>
+        <div class="panel" id="adminAddPanel"></div>
+        <div class="panel" id="adminAttendancePanel"></div>
+        <div class="panel" id="adminFeesPanel"></div>
+        <div class="panel" id="adminMessagesPanel"></div>
+    </div>
+</div>
+
+<script>
+    // Course Structure
+    const COURSES = {
+        dca: { name: "DCA", days: 60, fees: 300 },
+        dfa: { name: "DFA", days: 90, fees: 350 },
+        dafa: { name: "DAFA", days: 180, fees: 400 },
+        adv_excel: { name: "Advance Excel", days: 21, fees: 699 },
+        adv_tally: { name: "Advance Tally", days: 14, fees: 599 }
+    };
+    
+    // Default Admin
+    const ADMIN = {
+        username: "admin",
+        password: "admin123"
+    };
+    
+    let students = [];
+    let currentUser = null;
+    let currentUserType = null;
+    
+    // Load data from localStorage
+    function loadData() {
+        let saved = localStorage.getItem("student_system_v4");
+        if(saved) {
+            students = JSON.parse(saved);
+        } else {
+            students = [
+                {
+                    id: 1,
+                    rollNo: "STU001",
+                    username: "aarav",
+                    password: "1234",
+                    name: "आरव शर्मा",
+                    father: "राकेश शर्मा",
+                    mobile: "9876543210",
+                    email: "aarav@email.com",
+                    course: "dafa",
+                    admissionDate: "2025-01-15",
+                    feePaid: 200,
+                    attendance: [],
+                    notifications: []
+                },
+                {
+                    id: 2,
+                    rollNo: "STU002",
+                    username: "riya",
+                    password: "1234",
+                    name: "रिया सिंह",
+                    father: "राज सिंह",
+                    mobile: "9876543211",
+                    email: "riya@email.com",
+                    course: "dca",
+                    admissionDate: "2025-02-01",
+                    feePaid: 300,
+                    attendance: [],
+                    notifications: []
+                }
+            ];
+            saveData();
+        }
+    }
+    
+    function saveData() {
+        localStorage.setItem("student_system_v4", JSON.stringify(students));
+    }
+    
+    function showNotification(msg) {
+        let notif = document.createElement("div");
+        notif.className = "notification";
+        notif.innerHTML = msg;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
+    }
+    
+    // Helper Functions
+    function getDaysCompleted(student) {
+        let present = (student.attendance || []).filter(a => a.status === "present");
+        return present.length;
+    }
+    
+    function getAttendancePercent(student) {
+        let att = student.attendance || [];
+        if(att.length === 0) return 0;
+        let present = att.filter(a => a.status === "present").length;
+        return Math.round((present / att.length) * 100);
+    }
+    
+    function getDue(student) {
+        return COURSES[student.course].fees - (student.feePaid || 0);
+    }
+    
+    function getEndDate(student) {
+        let start = new Date(student.admissionDate);
+        let end = new Date(start);
+        end.setDate(start.getDate() + COURSES[student.course].days);
+        return end.toISOString().split('T')[0];
+    }
+    
+    // Add Notification for Student
+    function addNotification(studentId, title, message) {
+        let student = students.find(s => s.id === studentId);
+        if(student) {
+            if(!student.notifications) student.notifications = [];
+            student.notifications.unshift({
+                id: Date.now(),
+                title: title,
+                message: message,
+                date: new Date().toISOString().split('T')[0],
+                read: false
+            });
+            saveData();
+        }
+    }
+    
+    // Send SMS-like Notification (Mobile Alert)
+    function sendMobileAlert(studentId, message) {
+        addNotification(studentId, "💰 फीस जमा", message);
+        showNotification(`📱 Alert sent to student: ${message}`);
+        
+        // Try to show browser notification if permitted
+        if(Notification.permission === "granted") {
+            new Notification("Fee Payment Update", { body: message });
+        } else if(Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+    }
+    
+    // Mark Attendance
+    function markAttendance(studentId, date, status) {
+        let student = students.find(s => s.id === studentId);
+        if(!student) return;
+        
+        if(!student.attendance) student.attendance = [];
+        
+        let existing = student.attendance.findIndex(a => a.date === date);
+        if(existing !== -1) {
+            student.attendance[existing] = { date, status };
+        } else {
+            student.attendance.push({ date, status });
+        }
+        
+        saveData();
+        
+        let days = getDaysCompleted(student);
+        let total = COURSES[student.course].days;
+        showNotification(`✅ ${student.name}: ${status === "present" ? "उपस्थित" : "अनुपस्थित"} | प्रगति: ${days}/${total}`);
+        
+        // Send notification to student
+        if(status === "present") {
+            addNotification(student.id, "📝 अटेंडेंस", `आपकी ${date} की अटेंडेंस मार्क कर दी गई है. प्रगति: ${days}/${total} दिन`);
+        }
+        
+        renderAdmin();
+    }
+    
+    // Pay Fee
+    function payFee(studentId, amount) {
+        let student = students.find(s => s.id === studentId);
+        if(!student) return;
+        
+        student.feePaid = (student.feePaid || 0) + amount;
+        saveData();
+        
+        let due = getDue(student);
+        let message = `₹${amount} की फीस जमा हो गई. बकाया: ₹${due}`;
+        
+        // Send mobile alert to student
+        sendMobileAlert(studentId, message);
+        
+        showNotification(`💰 ₹${amount} जमा किया गया! बकाया: ₹${due}`);
+        
+        renderAdmin();
+    }
+    
+    // Delete Student
+    function deleteStudent(id) {
+        if(confirm("क्या आप यह छात्र डिलीट करना चाहते हैं?")) {
+            students = students.filter(s => s.id !== id);
+            saveData();
+            showNotification("✅ छात्र डिलीट कर दिया गया!");
+            renderAdmin();
+        }
+    }
+    
+    // Render Student Dashboard
+    function renderStudentDashboard() {
+        let student = currentUser;
+        let course = COURSES[student.course];
+        let days = getDaysCompleted(student);
+        let progressPercent = (days / course.days) * 100;
+        let attPercent = getAttendancePercent(student);
+        let due = getDue(student);
+        let endDate = getEndDate(student);
+        
+        // Student Info
+        document.getElementById("studentName").innerText = student.name;
+        document.getElementById("studentInfo").innerHTML = `
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-id-card"></i> Roll No:</span>
+                <span class="info-value">${student.rollNo}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-book"></i> Course:</span>
+                <span class="info-value">${course.name}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-calendar"></i> Admission:</span>
+                <span class="info-value">${student.admissionDate}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-flag-checkered"></i> End Date:</span>
+                <span class="info-value">${endDate}</span>
+            </div>
+        `;
+        
+        // Progress Panel
+        document.getElementById("progressPanel").innerHTML = `
+            <div class="student-card">
+                <h3>📊 Course Progress</h3>
+                <p>✅ Days Completed: ${days} / ${course.days}</p>
+                <div class="progress-bar"><div class="progress-fill" style="width: ${progressPercent}%;"></div></div>
+                <p style="margin-top: 10px;">${days >= course.days ? '🎉 Course Completed!' : `📅 ${course.days - days} days remaining`}</p>
+            </div>
+            <div class="student-card">
+                <h3>📈 Attendance</h3>
+                <p>Attendance Percentage: ${attPercent}%</p>
+                <div class="progress-bar"><div class="progress-fill" style="width: ${attPercent}%; background: #667eea;"></div></div>
+            </div>
+        `;
+        
+        // Attendance Panel
+        let attRecords = [...(student.attendance || [])].sort((a,b) => new Date(b.date) - new Date(a.date));
+        let attHtml = `<div class="student-card"><h3>📝 Attendance Record</h3>`;
+        if(attRecords.length === 0) {
+            attHtml += `<p>No attendance records yet.</p>`;
+        } else {
+            attHtml += `<div style="max-height: 300px; overflow-y: auto;">`;
+            attRecords.forEach(r => {
+                let statusText = r.status === "present" ? "✅ Present" : "❌ Absent";
+                attHtml += `<div class="info-row"><span>${r.date}</span><span class="badge ${r.status === 'present' ? 'badge-success' : 'badge-danger'}">${statusText}</span></div>`;
+            });
+            attHtml += `</div>`;
+        }
+        attHtml += `</div>`;
+        document.getElementById("attendancePanel").innerHTML = attHtml;
+        
+        // Fees Panel
+        document.getElementById("feesPanel").innerHTML = `
+            <div class="student-card">
+                <h3>💰 Fee Details</h3>
+                <div class="info-row"><span>Total Fees:</span><span>₹${course.fees}</span></div>
+                <div class="info-row"><span>Amount Paid:</span><span>₹${student.feePaid || 0}</span></div>
+                <div class="info-row"><span>Due Amount:</span><span class="${due > 0 ? 'badge-danger' : 'badge-success'}">₹${due}</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width: ${(student.feePaid / course.fees) * 100}%; background: #48bb78;"></div></div>
+                <p style="margin-top: 10px;">${due === 0 ? '✅ All fees paid!' : `⚠️ ₹${due} remaining`}</p>
+            </div>
+        `;
+        
+        // Notifications
+        let notifHtml = `<div class="student-card"><h3><i class="fas fa-bell"></i> Notifications</h3>`;
+        let notifs = student.notifications || [];
+        if(notifs.length === 0) {
+            notifHtml += `<p>No new notifications</p>`;
+        } else {
+            notifs.slice(0, 5).forEach(n => {
+                notifHtml += `<div style="background: #f0f2f5; padding: 10px; border-radius: 12px; margin-bottom: 8px;">
+                    <small style="color:#667eea;">${n.date}</small>
+                    <p style="font-size: 13px;">${n.message}</p>
+                </div>`;
+            });
+        }
+        notifHtml += `</div>`;
+        
+        // Add notifications to fees panel or create separate
+        let feesPanel = document.getElementById("feesPanel");
+        feesPanel.innerHTML += notifHtml;
+    }
+    
+    // Render Admin Dashboard
+    function renderAdmin() {
+        // Students List
+        let studentsHtml = `<div class="student-card"><h3>📋 All Students</h3>`;
+        students.forEach(s => {
+            let course = COURSES[s.course];
+            let days = getDaysCompleted(s);
+            studentsHtml += `
+                <div class="student-card" style="margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h4>${s.name}</h4>
+                        <i class="fas fa-trash" onclick="deleteStudent(${s.id})" style="color: #f56565; cursor: pointer;"></i>
+                    </div>
+                    <p>Roll: ${s.rollNo} | Course: ${course.name}</p>
+                    <p>Progress: ${days}/${course.days} days | Attendance: ${getAttendancePercent(s)}%</p>
+                    <p>Fees: ₹${s.feePaid || 0}/${course.fees} | Due: ₹${getDue(s)}</p>
+                </div>
+            `;
+        });
+        studentsHtml += `</div>`;
+        document.getElementById("adminStudentsPanel").innerHTML = studentsHtml;
+        
+        // Add Student Form
+        document.getElementById("adminAddPanel").innerHTML = `
+            <div class="student-card">
+                <h3>➕ Add New Student</h3>
+                <div class="form-group"><label>Roll No</label><input type="text" id="newRollNo" placeholder="STU001"></div>
+                <div class="form-group"><label>Username</label><input type="text" id="newUsername" placeholder="username"></div>
+                <div class="form-group"><label>Password</label><input type="text" id="newPassword" placeholder="password" value="1234"></div>
+                <div class="form-group"><label>Full Name</label><input type="text" id="newName" placeholder="राम कुमार"></div>
+                <div class="form-group"><label>Father's Name</label><input type="text" id="newFather" placeholder="श्री राज कुमार"></div>
+                <div class="form-group"><label>Mobile</label><input type="text" id="newMobile" placeholder="9876543210"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="newEmail" placeholder="student@email.com"></div>
+                <div class="form-group"><label>Course</label><select id="newCourse"></select></div>
+                <div class="form-group"><label>Admission Date</label><input type="date" id="newDate"></div>
+                <button class="btn-primary" id="addStudentBtn">✅ Add Student</button>
+            </div>
+        `;
+        
+        // Populate course dropdown
+        document.getElementById("newCourse").innerHTML = Object.entries(COURSES).map(([key,val]) => `<option value="${key}">${val.name} (${val.days} days) - ₹${val.fees}</option>`).join("");
+        document.getElementById("newDate").value = new Date().toISOString().split('T')[0];
+        
+        // Attendance Panel
+        let attHtml = `<div class="student-card"><h3>📝 Mark Attendance</h3>
+            <div class="form-group"><label>Select Student</label><select id="attStudentSelect"></select></div>
+            <div class="form-group"><label>Date</label><input type="date" id="attDate" value="${new Date().toISOString().split('T')[0]}"></div>
+            <button class="btn-success" id="markPresentBtn" style="margin-bottom: 10px;">✅ Mark Present</button>
+            <button class="btn-danger" id="markAbsentBtn">❌ Mark Absent</button>
+        </div>`;
+        document.getElementById("adminAttendancePanel").innerHTML = attHtml;
+        
+        let attSelect = document.getElementById("attStudentSelect");
+        attSelect.innerHTML = students.map(s => `<option value="${s.id}">${s.name} (${s.rollNo})</option>`).join("");
+        
+        // Fees Panel
+        let feesHtml = `<div class="student-card"><h3>💰 Fee Management</h3>
+            <div class="form-group"><label>Select Student</label><select id="feeStudentSelect"></select></div>
+            <div class="form-group"><label>Amount (₹)</label><input type="number" id="feeAmount" placeholder="Enter amount"></div>
+            <button class="btn-primary" id="payFeeBtn">💸 Pay Fee</button>
+        </div>`;
+        document.getElementById("adminFeesPanel").innerHTML = feesHtml;
+        
+        let feeSelect = document.getElementById("feeStudentSelect");
+        feeSelect.innerHTML = students.map(s => `<option value="${s.id}">${s.name} - Due: ₹${getDue(s)}</option>`).join("");
+        
+        // Messages Panel
+        let msgHtml = `<div class="student-card"><h3>📨 Send Message to Student</h3>
+            <div class="form-group"><label>Select Student</label><select id="msgStudentSelect"></select></div>
+            <div class="form-group"><label>Message Title</label><input type="text" id="msgTitle" placeholder="e.g., Fee Reminder"></div>
+            <div class="form-group"><label>Message</label><textarea id="msgContent" rows="3" style="width:100%; padding:10px; border-radius:12px;" placeholder="Enter your message here..."></textarea></div>
+            <button class="btn-primary" id="sendMsgBtn">📨 Send Message</button>
+        </div>`;
+        document.getElementById("adminMessagesPanel").innerHTML = msgHtml;
+        
+        let msgSelect = document.getElementById("msgStudentSelect");
+        msgSelect.innerHTML = students.map(s => `<option value="${s.id}">${s.name} (${s.rollNo})</option>`).join("");
+        
+        // Bind events
+        document.getElementById("addStudentBtn")?.addEventListener("click", addStudent);
+        document.getElementById("markPresentBtn")?.addEventListener("click", () => {
+            let id = parseInt(document.getElementById("attStudentSelect").value);
+            let date = document.getElementById("attDate").value;
+            markAttendance(id, date, "present");
+        });
+        document.getElementById("markAbsentBtn")?.addEventListener("click", () => {
+            let id = parseInt(document.getElementById("attStudentSelect").value);
+            let date = document.getElementById("attDate").value;
+            markAttendance(id, date, "absent");
+        });
+        document.getElementById("payFeeBtn")?.addEventListener("click", () => {
+            let id = parseInt(document.getElementById("feeStudentSelect").value);
+            let amount = parseFloat(document.getElementById("feeAmount").value);
+            if(isNaN(amount) || amount <= 0) {
+                showNotification("Please enter valid amount!");
+                return;
+            }
+            payFee(id, amount);
+            document.getElementById("feeAmount").value = "";
+        });
+        document.getElementById("sendMsgBtn")?.addEventListener("click", () => {
+            let id = parseInt(document.getElementById("msgStudentSelect").value);
+            let title = document.getElementById("msgTitle").value;
+            let content = document.getElementById("msgContent").value;
+            if(!title || !content) {
+                showNotification("Please enter both title and message!");
+                return;
+            }
+            addNotification(id, title, content);
+            showNotification(`📨 Message sent to student!`);
+            document.getElementById("msgTitle").value = "";
+            document.getElementById("msgContent").value = "";
+        });
+    }
+    
+    function addStudent() {
+        let rollNo = document.getElementById("newRollNo").value.trim();
+        let username = document.getElementById("newUsername").value.trim();
+        let password = document.getElementById("newPassword").value.trim();
+        let name = document.getElementById("newName").value.trim();
+        let father = document.getElementById("newFather").value.trim();
+        let mobile = document.getElementById("newMobile").value.trim();
+        let email = document.getElementById("newEmail").value.trim();
+        let course = document.getElementById("newCourse").value;
+        let date = document.getElementById("newDate").value;
+        
+        if(!rollNo || !username || !name || !father || !mobile || !course || !date) {
+            showNotification("Please fill all required fields!");
+            return;
+        }
+        
+        let newId = Date.now();
+        students.push({
+            id: newId,
+            rollNo: rollNo,
+            username: username,
+            password: password || "1234",
+            name: name,
+            father: father,
+            mobile: mobile,
+            email: email,
+            course: course,
+            admissionDate: date,
+            feePaid: 0,
+            attendance: [],
+            notifications: []
+        });
+        
+        saveData();
+        showNotification("✅ Student added successfully!");
+        renderAdmin();
+        
+        document.getElementById("newRollNo").value = "";
+        document.getElementById("newUsername").value = "";
+        document.getElementById("newName").value = "";
+        document.getElementById("newFather").value = "";
+        document.getElementById("newMobile").value = "";
+        document.getElementById("newEmail").value = "";
+    }
+    
+    // Login
+    function login(username, password, type) {
+        if(type === "admin") {
+            if(username === ADMIN.username && password === ADMIN.password) {
+                currentUser = ADMIN;
+                currentUserType = "admin";
+                document.getElementById("loginScreen").style.display = "none";
+                document.getElementById("studentDashboard").style.display = "none";
+                document.getElementById("adminDashboard").style.display = "block";
+                renderAdmin();
+                setupAdminTabs();
+                return true;
+            }
+        } else {
+            let student = students.find(s => s.username === username && s.password === password);
+            if(student) {
+                currentUser = student;
+                currentUserType = "student";
+                document.getElementById("loginScreen").style.display = "none";
+                document.getElementById("adminDashboard").style.display = "none";
+                document.getElementById("studentDashboard").style.display = "block";
+                renderStudentDashboard();
+                setupStudentTabs();
+                return true;
+            }
+        }
+        showNotification("❌ Invalid username or password!");
+        return false;
+    }
+    
+    function logout() {
+        currentUser = null;
+        currentUserType = null;
+        document.getElementById("loginScreen").style.display = "block";
+        document.getElementById("studentDashboard").style.display = "none";
+        document.getElementById("adminDashboard").style.display = "none";
+    }
+    
+    function setupStudentTabs() {
+        document.querySelectorAll("#studentTabs .tab").forEach(tab => {
+            tab.addEventListener("click", () => {
+                document.querySelectorAll("#studentTabs .tab").forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+                document.querySelectorAll("#studentDashboard .panel").forEach(p => p.classList.remove("active"));
+                document.getElementById(tab.dataset.tab + "Panel").classList.add("active");
+            });
+        });
+    }
+    
+    function setupAdminTabs() {
+        document.querySelectorAll("#adminTabs .tab").forEach(tab => {
+            tab.addEventListener("click", () => {
+                document.querySelectorAll("#adminTabs .tab").forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+                document.querySelectorAll("#adminDashboard .panel").forEach(p => p.classList.remove("active"));
+                document.getElementById("admin" + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1) + "Panel").classList.add("active");
+            });
+        });
+    }
+    
+    // Event Listeners
+    document.getElementById("loginBtn")?.addEventListener("click", () => {
+        let username = document.getElementById("loginUsername").value.trim();
+        let password = document.getElementById("loginPassword").value.trim();
+        login(username, password, "student");
+    });
+    
+    document.getElementById("adminLoginBtn")?.addEventListener("click", () => {
+        let username = document.getElementById("loginUsername").value.trim();
+        let password = document.getElementById("loginPassword").value.trim();
+        login(username, password, "admin");
+    });
+    
+    // Request notification permission on load
+    if(Notification.permission === "default") {
+        Notification.requestPermission();
+    }
+    
+    // Initialize
+    loadData();
+    
+    // Make functions global
+    window.deleteStudent = deleteStudent;
+    window.logout = logout;
+    window.markAttendance = markAttendance;
+</script>
+</body>
+</html>
